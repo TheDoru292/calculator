@@ -1,0 +1,48 @@
+body {
+    display: flex;
+    justify-content: center;
+}
+
+.main-container {
+    display: flex;
+    flex-direction: column;
+    background-color: rgb(83, 83, 95);
+    height: 450px;
+    max-width: 320px;
+    border-radius: 10px;
+    border: 2px solid black;
+}
+
+.display {
+    display: flex;
+    flex-direction: row-reverse;
+    background-color: rgb(235, 233, 233);
+    padding-right: 10px;
+    font-size: 18px;
+    margin: 13px 13px;
+    border-radius: 3px;
+    border: 2px solid black;
+}
+
+.buttons {    
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 15px;
+    padding-top: 10px;
+}
+
+.bigger {
+    width: 140px;
+}
+
+button {
+    width: 65px;
+    height: 60px;
+    font-size: 18px;
+    border: 1px solid black;
+}
+
+button:hover {
+    background-color: rgb(181, 181, 184);
+}
