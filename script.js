@@ -2,6 +2,7 @@ let displayValue = 0;
 let historyValue = "";
 let functionUsed = false;
 let firstFunctionUsed = false;
+let secondFunctionUsed
 let firstNumber = 0;
 let secondNumber = 0;
 let resultNumber = 0;
@@ -12,29 +13,29 @@ result.textContent = displayValue;
 
 function add(num1, num2) {
     resultNumber = +num1 + +num2;
-    displayValue = 0;
-    result.textContent = resultNumber;
+    displayValue = resultNumber;
+    result.textContent = displayValue;
     resultNumber = 0;
 }
 
 function subtract(num1, num2) {
     resultNumber = num1 - num2;
-    displayValue = 0;
-    result.textContent = resultNumber;
+    displayValue = resultNumber;
+    result.textContent = displayValue;
     resultNumber = 0;
 }
 
 function multiply(num1, num2) {
     resultNumber = num1 * num2;
-    displayValue = 0;
-    result.textContent = resultNumber;
+    displayValue = resultNumber;
+    result.textContent = displayValue;
     resultNumber = 0;
 }
 
 function divide(num1, num2) {
     resultNumber = num1 / num2;
-    displayValue = 0;
-    result.textContent = resultNumber;
+    displayValue = resultNumber;
+    result.textContent = displayValue;
     resultNumber = 0;
 }
 
