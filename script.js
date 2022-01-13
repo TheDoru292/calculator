@@ -2,41 +2,56 @@ let displayValue = 0;
 let historyValue = "";
 let functionUsed = false;
 let firstFunctionUsed = false;
-let secondFunctionUsed
+let wasFunctionUsedInsteadOfEquals = false;
 let firstNumber = 0;
 let secondNumber = 0;
 let resultNumber = 0;
-let singUsed = "";
+let signUsed = "";
+let secondSignUsed = "";
 
 const result = document.querySelector(".result");
 result.textContent = displayValue;
 
+const history = document.querySelector(".history");
+
+function showResults(resulto) {
+    if(wasFunctionUsedInsteadOfEquals === true) {
+        displayValue = resulto;
+        firstNumber = displayValue;
+        result.textContent = displayValue;
+        historyValue = resulto + secondSignUsed;
+        signUsed = secondSignUsed;
+        history.textContent = historyValue;
+        resultNumber = 0;
+        secondNumber = 0;
+    } else {
+        
+        displayValue = resulto;
+        result.textContent = displayValue;
+        resultNumber = 0;
+        firstNumber = 0;
+        secondNumber = 0;
+    }
+}
+
 function add(num1, num2) {
     resultNumber = +num1 + +num2;
-    displayValue = resultNumber;
-    result.textContent = displayValue;
-    resultNumber = 0;
+    showResults(resultNumber);
 }
 
 function subtract(num1, num2) {
     resultNumber = num1 - num2;
-    displayValue = resultNumber;
-    result.textContent = displayValue;
-    resultNumber = 0;
+    showResults(resultNumber);
 }
 
 function multiply(num1, num2) {
     resultNumber = num1 * num2;
-    displayValue = resultNumber;
-    result.textContent = displayValue;
-    resultNumber = 0;
+    showResults(resultNumber);
 }
 
 function divide(num1, num2) {
-    resultNumber = num1 / num2;
-    displayValue = resultNumber;
-    result.textContent = displayValue;
-    resultNumber = 0;
+    resultNumber = Math.round((num1 / num2) * 10) / 10;
+    showResults(resultNumber);
 }
 
 function operate(operator, num1, num2) {
@@ -47,21 +62,18 @@ function operate(operator, num1, num2) {
     } else if(operator === "×") {
         multiply(num1, num2);
     } else if(operator === "÷") {
-        divide(num1, num2);
+            divide(num1, num2);
     } else {
         console.log("Something went wrong!")
     }
-
-    // console.log(operator, num1, num2);
 }
 
 const numbers = document.querySelectorAll(".numbers");
 const clear = document.querySelector(".clear");
 const deleteButton = document.querySelector(".delete");
 const functionAdding = document.querySelectorAll(".function");
-const history = document.querySelector(".history");
 const equals = document.querySelector(".equals");
-// const iAmFloating = document.querySelector(".float");
+const iAmFloating = document.querySelector(".floating");
 
 numbers.forEach((button) => {
     button.addEventListener("click", (e) => {
@@ -70,6 +82,10 @@ numbers.forEach((button) => {
         } else{
             displayValue += e.target.textContent;
         }
+        if(wasFunctionUsedInsteadOfEquals === true) {
+            displayValue = e.target.textContent;
+            wasFunctionUsedInsteadOfEquals = false;         
+        } 
         if(functionUsed === true) {
             displayValue = e.target.textContent;
             functionUsed = false;
@@ -80,27 +96,45 @@ numbers.forEach((button) => {
 
 functionAdding.forEach((button) => {
     button.addEventListener("click", (e) => {
-        // console.log(e.target);
-        historyValue += displayValue + e.target.textContent;
-        firstNumber = displayValue;
-        functionUsed = true;
-        firstFunctionUsed = true;
-        signUsed = e.target.textContent;
-        history.textContent = historyValue;
-        result.textContent = displayValue;
+        if(!firstNumber || !firstNumber && secondNumber === 0 || firstNumber === 0 && secondNumber === 0){
+            historyValue = displayValue + e.target.textContent;
+            firstNumber = displayValue;
+            functionUsed = true;
+            signUsed = e.target.textContent;
+            history.textContent = historyValue;
+            result.textContent = displayValue;
+            firstFunctionUsed = true;
+        } else {
+            secondNumber = displayValue;
+            history.textContent = historyValue;
+            wasFunctionUsedInsteadOfEquals = true;
+            secondSignUsed = e.target.textContent;
+            operate(signUsed, firstNumber, secondNumber);
+        }
     });
 });
 
 equals.addEventListener("click", (e) => {
-    historyValue += displayValue + e.target.textContent;
-    history.textContent = historyValue;
     secondNumber = displayValue;
+    console.log(secondNumber);
+    console.log(signUsed);
+    if(firstNumber === 0) {
 
-    operate(signUsed, firstNumber, secondNumber);
+    } else if(secondNumber === 0 && signUsed === "÷") {
+      alert("You can't divide with 0!");
+    } else {
+        historyValue += displayValue + e.target.textContent;
+        history.textContent = historyValue;
+
+        operate(signUsed, firstNumber, secondNumber);
+    }
 });
 
 clear.addEventListener("click", (e) => {
     displayValue = 0;
+    firstNumber = 0;
+    secondNumber = 0;
+    resultNumber = 0;
     historyValue = "";
     functionUsed = false;
     result.textContent = displayValue;
@@ -112,7 +146,7 @@ deleteButton.addEventListener("click", (e) => {
     result.textContent = displayValue;
 });
 
-// iAmFloating.addEventListener("click", (e) => {
-//     displayValue = Math.floor(displayValue / 10);
-//     result.textContent = displayValue;
-// });
+iAmFloating.addEventListener("click", (e) => {
+     displayValue = Math.floor(displayValue / 10);
+     result.textContent = displayValue;
+});
