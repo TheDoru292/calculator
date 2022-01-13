@@ -8,6 +8,8 @@ let secondNumber = 0;
 let resultNumber = 0;
 let signUsed = "";
 let secondSignUsed = "";
+let floatUsed = false;
+let floatNumber = 0;
 
 const result = document.querySelector(".result");
 result.textContent = displayValue;
@@ -77,8 +79,10 @@ const iAmFloating = document.querySelector(".floating");
 
 numbers.forEach((button) => {
     button.addEventListener("click", (e) => {
-        if(displayValue === 0) {
+        if (displayValue === 0) {
             displayValue = e.target.textContent;
+        } else if (displayValue >= 9999999999999999999) {
+            displayValue;
         } else{
             displayValue += e.target.textContent;
         }
@@ -90,6 +94,10 @@ numbers.forEach((button) => {
             displayValue = e.target.textContent;
             functionUsed = false;
         }
+        if(floatUsed === true) {
+            displayValue = floatNumber + "." + e.target.textContent;
+        }
+        
         result.textContent = displayValue;
     });
 });
@@ -104,12 +112,16 @@ functionAdding.forEach((button) => {
             history.textContent = historyValue;
             result.textContent = displayValue;
             firstFunctionUsed = true;
+            floatUsed = false;
+            floatNumber = 0;
         } else {
             secondNumber = displayValue;
+            floatUsed = false;
             history.textContent = historyValue;
             wasFunctionUsedInsteadOfEquals = true;
             secondSignUsed = e.target.textContent;
             operate(signUsed, firstNumber, secondNumber);
+            floatNumber = 0;
         }
     });
 });
@@ -135,6 +147,8 @@ clear.addEventListener("click", (e) => {
     firstNumber = 0;
     secondNumber = 0;
     resultNumber = 0;
+    floatNumber = 0;
+    floatUsed = false;
     historyValue = "";
     functionUsed = false;
     result.textContent = displayValue;
@@ -147,6 +161,8 @@ deleteButton.addEventListener("click", (e) => {
 });
 
 iAmFloating.addEventListener("click", (e) => {
-     displayValue = Math.floor(displayValue / 10);
-     result.textContent = displayValue;
+    displayValue += "." + floatNumber;
+    floatNumber = Math.round(displayValue * 10) / 10;
+    floatUsed = true;
+    result.textContent = displayValue;
 });
