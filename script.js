@@ -12,9 +12,14 @@ let floatUsed = false;
 let floatNumber = 0;
 
 const result = document.querySelector(".result");
-result.textContent = displayValue;
-
 const history = document.querySelector(".history");
+const numbers = document.querySelectorAll(".numbers");
+const clear = document.querySelector(".clear");
+const deleteButton = document.querySelector(".delete");
+const functionAdding = document.querySelectorAll(".function");
+const equals = document.querySelector(".equals");
+const iAmFloating = document.querySelector(".floating");
+result.textContent = displayValue;
 
 function showResults(resulto) {
     if(wasFunctionUsedInsteadOfEquals === true) {
@@ -70,76 +75,93 @@ function operate(operator, num1, num2) {
     }
 }
 
-const numbers = document.querySelectorAll(".numbers");
-const clear = document.querySelector(".clear");
-const deleteButton = document.querySelector(".delete");
-const functionAdding = document.querySelectorAll(".function");
-const equals = document.querySelector(".equals");
-const iAmFloating = document.querySelector(".floating");
+function deleteFunction() {
+    displayValue = Math.floor(displayValue / 10);
+    result.textContent = displayValue;
+}
 
-numbers.forEach((button) => {
-    button.addEventListener("click", (e) => {
-        if (displayValue === 0) {
-            displayValue = e.target.textContent;
-        } else if (displayValue >= 9999999999999999999) {
-            displayValue;
-        } else{
-            displayValue += e.target.textContent;
-        }
-        if(wasFunctionUsedInsteadOfEquals === true) {
-            displayValue = e.target.textContent;
-            wasFunctionUsedInsteadOfEquals = false;         
-        } 
-        if(functionUsed === true) {
-            displayValue = e.target.textContent;
-            functionUsed = false;
-        }
-        if(floatUsed === true) {
-            displayValue = floatNumber + "." + e.target.textContent;
-        }
-        
+function writeNumbers(e) {
+    if (displayValue === 0) {
+        displayValue = e;
+    } else if (displayValue >= 9999999999999999999) {
+        displayValue;
+    } else{
+        displayValue += e;
+    }
+    if(wasFunctionUsedInsteadOfEquals === true) {
+        displayValue = e;
+        wasFunctionUsedInsteadOfEquals = false;         
+    } 
+    if(functionUsed === true) {
+        displayValue = e;
+        functionUsed = false;
+    }
+    if(floatUsed === true) {
+        displayValue = floatNumber + "." + e;
+    }
+    
+    result.textContent = displayValue;
+}
+
+function operator(e) {
+    if(!firstNumber || !firstNumber && secondNumber === 0 || firstNumber === 0 && secondNumber === 0){
+        historyValue = displayValue + e;
+        firstNumber = displayValue;
+        functionUsed = true;
+        signUsed = e;
+        history.textContent = historyValue;
         result.textContent = displayValue;
-    });
-});
+        firstFunctionUsed = true;
+        floatUsed = false;
+        floatNumber = 0;
+    } else {
+        secondNumber = displayValue;
+        floatUsed = false;
+        history.textContent = historyValue;
+        wasFunctionUsedInsteadOfEquals = true;
+        secondSignUsed = e;
+        operate(signUsed, firstNumber, secondNumber);
+        floatNumber = 0;
+    }
+}
 
-functionAdding.forEach((button) => {
-    button.addEventListener("click", (e) => {
-        if(!firstNumber || !firstNumber && secondNumber === 0 || firstNumber === 0 && secondNumber === 0){
-            historyValue = displayValue + e.target.textContent;
-            firstNumber = displayValue;
-            functionUsed = true;
-            signUsed = e.target.textContent;
-            history.textContent = historyValue;
-            result.textContent = displayValue;
-            firstFunctionUsed = true;
-            floatUsed = false;
-            floatNumber = 0;
-        } else {
-            secondNumber = displayValue;
-            floatUsed = false;
-            history.textContent = historyValue;
-            wasFunctionUsedInsteadOfEquals = true;
-            secondSignUsed = e.target.textContent;
-            operate(signUsed, firstNumber, secondNumber);
-            floatNumber = 0;
-        }
-    });
-});
-
-equals.addEventListener("click", (e) => {
+function equal(e) {
     secondNumber = displayValue;
-    console.log(secondNumber);
-    console.log(signUsed);
     if(firstNumber === 0) {
 
     } else if(secondNumber === 0 && signUsed === "÷") {
       alert("You can't divide with 0!");
     } else {
-        historyValue += displayValue + e.target.textContent;
+        historyValue += displayValue + "=";
         history.textContent = historyValue;
 
         operate(signUsed, firstNumber, secondNumber);
     }
+}
+
+function addFloat() {
+    displayValue += "." + floatNumber;
+    floatNumber = Math.round(displayValue * 10) / 10;
+    floatUsed = true;
+    result.textContent = displayValue;
+}
+
+
+
+numbers.forEach((button) => {
+    button.addEventListener("click", (e) => {
+        writeNumbers(e.target.textContent);
+    });
+});
+
+functionAdding.forEach((button) => {
+    button.addEventListener("click", (e) => {
+        operator(e.target.textContent);
+    });
+});
+
+equals.addEventListener("click", (e) => {
+    equal(e.target.textContent);
 });
 
 clear.addEventListener("click", (e) => {
@@ -156,13 +178,9 @@ clear.addEventListener("click", (e) => {
 });
 
 deleteButton.addEventListener("click", (e) => {
-    displayValue = Math.floor(displayValue / 10);
-    result.textContent = displayValue;
+    deleteFunction();
 });
 
 iAmFloating.addEventListener("click", (e) => {
-    displayValue += "." + floatNumber;
-    floatNumber = Math.round(displayValue * 10) / 10;
-    floatUsed = true;
-    result.textContent = displayValue;
+    addFloat();
 });
