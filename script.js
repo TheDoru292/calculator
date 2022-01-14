@@ -99,12 +99,16 @@ function writeNumbers(e) {
     if(floatUsed === true) {
         displayValue = floatNumber + "." + e;
     }
+    if(firstNumber > 0 && secondNumber === 0) {
+        displayValue = e;
+        secondNumber = displayValue;
+    }
     
     result.textContent = displayValue;
 }
 
 function operator(e) {
-    if(!firstNumber || !firstNumber && secondNumber === 0 || firstNumber === 0 && secondNumber === 0){
+    if(!firstNumber || !firstNumber && secondNumber === 0 || firstNumber === 0 && secondNumber === 0 || secondNumber === 0){
         historyValue = displayValue + e;
         firstNumber = displayValue;
         functionUsed = true;
@@ -114,7 +118,7 @@ function operator(e) {
         firstFunctionUsed = true;
         floatUsed = false;
         floatNumber = 0;
-    } else {
+    } else if(firstNumber > 0 && secondNumber > 0) {
         secondNumber = displayValue;
         floatUsed = false;
         history.textContent = historyValue;
