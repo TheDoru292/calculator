@@ -15,6 +15,10 @@ display.addEventListener("keydown", (e) => {
     }
     if(e.code === "NumpadAdd" || e.code === "NumpadSubtract" || e.code === "NumpadDivide" || e.code === "NumpadMultiply") {
         operator(e.key);
+
+        if(e.code === "NumpadDivide") {
+            operator("÷");
+        }
     }
     if(e.code == "NumpadDecimal") {
         addFloat();
