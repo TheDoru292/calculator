@@ -1,41 +1,54 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="utf-8">
-        <title>Calculator</title>
-        <link rel="stylesheet" href="style.css">
-    </head>
-    <body>
-        <div class="main-container">
-
-            <div class="display">
-                <p class="smaller margin history"></p>
-                <p class="margin below result"></p>
-            </div>
-
-            <div class="buttons">
-                <button class="bigger red clear">Clear</button>
-                <button class="bigger blue delete">Delete</button>
-                <button class="numbers">7</button>
-                <button class="numbers">8</button>
-                <button class="numbers">9</button>
-                <button class="function">÷</button>
-                <button class="numbers">4</button>
-                <button class="numbers">5</button>
-                <button class="numbers">6</button>
-                <button class="function">×</button>
-                <button class="numbers">1</button>
-                <button class="numbers">2</button>
-                <button class="numbers">3</button>
-                <button class="function">-</button>
-                <button class="floating">.</button>
-                <button class="numbers">0</button>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculator</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron">
+</head>
+<body>
+    <div class="main">
+        <div class="frame">
+            <div class="calculator">
+                <div class="display">
+                    <p class="display-text"></p>
+                </div>
+                <button class="number">7</button>
+                <button class="number">8</button>
+                <button class="number">9</button>
+    
+                <button class="functions">÷</button>
+    
+                <button class="number">4</button>
+                <button class="number">5</button>
+                <button class="number">6</button>
+    
+                <button class="functions">x</button>
+    
+                <button class="number">1</button>
+                <button class="number">2</button>
+                <button class="number">3</button>
+    
+                <button class="functions">-</button>
+    
+                <button class="number">0</button>
+    
+                <button class="decimals">.</button>
                 <button class="equals">=</button>
-                <button class="function">+</button>
+                <button class="functions">+</button>
             </div>
-
         </div>
-        <script src="script.js" defer></script>
-        <script src="keyboard.js" defer></script>
-    </body>
+        <div class="buttons">
+            <button class="delete">Delete</button>
+            <button class="reset">Reset</button>
+        </div>
+        <div class="logs">
+    
+        </div>
+    </div>
+    <script src="script.js"></script>
+    <script src="keyboard.js"></script>
+</body>
 </html>

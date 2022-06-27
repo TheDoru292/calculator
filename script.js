@@ -1,190 +1,235 @@
-let displayValue = 0;
-let historyValue = "";
-let functionUsed = false;
-let firstFunctionUsed = false;
-let wasFunctionUsedInsteadOfEquals = false;
-let firstNumber = 0;
-let secondNumber = 0;
-let resultNumber = 0;
-let signUsed = "";
-let secondSignUsed = "";
-let floatUsed = false;
-let floatNumber = 0;
+function add(a, b) {
+    return (+a + +b);
+}
 
-const result = document.querySelector(".result");
-const history = document.querySelector(".history");
-const numbers = document.querySelectorAll(".numbers");
-const clear = document.querySelector(".clear");
-const deleteButton = document.querySelector(".delete");
-const functionAdding = document.querySelectorAll(".function");
-const equals = document.querySelector(".equals");
-const iAmFloating = document.querySelector(".floating");
-result.textContent = displayValue;
+function substract(a, b) {
+    return (a - b);
+}
 
-function showResults(resulto) {
-    if(wasFunctionUsedInsteadOfEquals === true) {
-        displayValue = resulto;
-        firstNumber = displayValue;
-        result.textContent = displayValue;
-        historyValue = resulto + secondSignUsed;
-        signUsed = secondSignUsed;
-        history.textContent = historyValue;
-        resultNumber = 0;
-        secondNumber = 0;
+function multiply(a, b) {
+    return (a * b);
+}
+
+function divide(a, b) {
+    let temp = a / b;
+    if(temp === Infinity) {
+        console.log("no.");
     } else {
-        
-        displayValue = resulto;
-        result.textContent = displayValue;
-        resultNumber = 0;
-        firstNumber = 0;
-        secondNumber = 0;
+        return temp.toFixed(1);
     }
 }
 
-function add(num1, num2) {
-    resultNumber = +num1 + +num2;
-    showResults(resultNumber);
-}
+function events() {
+    const numberButtons = document.querySelectorAll(".number");
+    const functionButtons = document.querySelectorAll(".functions");
+    const equals = document.querySelector(".equals");
+    const displayText = document.querySelector(".display-text");
+    const secondFunctionButtons = document.querySelectorAll(".buttons");
+    const decimals = document.querySelector(".decimals");
 
-function subtract(num1, num2) {
-    resultNumber = num1 - num2;
-    showResults(resultNumber);
-}
+    let firstNumber;
+    let secondNumber;
+    let result;
+    let operator;
+    let equalsUsedWithOperator;
+    let operatorUsedAsEquals;
+    let firstDecimalsUsed;
+    let secondDecimalsUsed;
 
-function multiply(num1, num2) {
-    resultNumber = num1 * num2;
-    showResults(resultNumber);
-}
-
-function divide(num1, num2) {
-    resultNumber = Math.round((num1 / num2) * 10) / 10;
-    showResults(resultNumber);
-}
-
-function operate(operator, num1, num2) {
-    if(operator === "-") {
-        subtract(num1, num2);
-    } else if(operator === "+") {
-        add(num1, num2);
-    } else if(operator === "×") {
-        multiply(num1, num2);
-    } else if(operator === "÷") {
-            divide(num1, num2);
-    } else {
-        console.log("Something went wrong!")
+    function operate(num1, num2, operator) {
+        switch(operator) {
+            case "+": {
+                result = add(num1, num2);
+                afterMath(result);
+                break;
+            }
+            case "-": {
+                result = substract(num1, num2);
+                afterMath(result);
+                break;
+            }
+            case "x": {
+                result = multiply(num1, num2);
+                afterMath(result);
+                break;
+            }
+            case "÷": {
+                result = divide(num1, num2);
+                afterMath(result);
+                break;
+            }
+            default: {
+                console.log("Something went very wrong.");
+            }
+        }
     }
-}
 
-function deleteFunction() {
-    displayValue = Math.floor(displayValue / 10);
-    result.textContent = displayValue;
-}
+    function numberFunction(e) {
+        let value = e;
 
-function writeNumbers(e) {
-    if (displayValue === 0) {
-        displayValue = e;
-    } else if (displayValue >= 9999999999999999999) {
-        displayValue;
-    } else{
-        displayValue += e;
+        if(!operator && firstNumber !== undefined) { // if there's no operator and firstNumber is defined, this will add on to the numbers
+            if(firstDecimalsUsed === true) {
+                firstNumber += '.' + value;
+                firstDecimalsUsed = false;
+                displayText.textContent = firstNumber;
+            } else {
+                firstNumber += value;
+                displayText.textContent += value;
+                console.log(firstNumber);
+            }
+        }
+
+        if(!firstNumber && !operator) { // if there's no first number and no operator, then this will be the first number
+            firstNumber = value;
+            displayText.textContent = firstNumber;
+        }
+
+        if(firstNumber !== undefined && operator !== undefined && secondNumber !== undefined) { // this will add on to the second number
+            if(secondDecimalsUsed === true) {
+                secondNumber += '.' + value;
+                console.log(secondNumber);
+                secondDecimalsUsed = false;
+                displayText.textContent = `${firstNumber}${operator}${secondNumber}`;
+            } else {
+                secondNumber += value;
+                displayText.textContent += value;
+                console.log(secondNumber);
+            }
+        }
+
+        if(firstNumber !== undefined && operator !== undefined && !secondNumber) { // this will give of the first digit of the second number
+            secondNumber = value;
+            displayText.textContent += value;
+        }
     }
-    if(wasFunctionUsedInsteadOfEquals === true) {
-        displayValue = e;
-        wasFunctionUsedInsteadOfEquals = false;         
-    } 
-    if(functionUsed === true) {
-        displayValue = e;
-        functionUsed = false;
+
+    function afterMath(value) {
+        console.log(firstNumber);
+        if(equalsUsedWithOperator === true) {
+            displayText.textContent = `${result}${operatorUsedAsEquals}`;
+            operator = operatorUsedAsEquals;
+        } else {
+            displayText.textContent = value;
+            operator = undefined;
+        }
+        equalsUsedWithOperator = false;
+        firstNumber = value;
+        secondNumber = undefined;
+        result = undefined;
     }
-    if(floatUsed === true) {
-        displayValue = floatNumber + "." + e;
+
+    function reset() {
+        firstNumber = undefined;
+        secondNumber = undefined;
+        operator = undefined;
+        result = undefined;
+        displayText.textContent = "";
     }
-    if(firstNumber > 0 && secondNumber === 0) {
-        displayValue = e;
-        secondNumber = displayValue;
+
+    function deleteNumber() {
+        if(operator === undefined && secondNumber === undefined) {
+            let temp = firstNumber.slice(0, -1);
+            firstNumber = temp;
+            displayText.textContent = firstNumber;
+        }
+        if(firstNumber !== undefined && operator !== undefined && secondNumber !== undefined) {
+            console.log(secondNumber);
+            let temp = secondNumber.slice(0, -1);
+            secondNumber = temp;
+            displayText.textContent = `${firstNumber}${operator}${secondNumber}`;
+            
+            if(secondNumber === '') {
+                secondNumber = undefined;
+            }
+        }
+        if(firstNumber !== undefined && secondNumber === undefined && operator !== undefined) { // deletes operator
+            displayText.textContent = displayText.textContent.slice(0, -1);
+            operator = undefined;
+        }
     }
-    
-    result.textContent = displayValue;
-}
 
-function operator(e) {
-    if(!firstNumber || !firstNumber && secondNumber === 0 || firstNumber === 0 && secondNumber === 0 || secondNumber === 0){
-        historyValue = displayValue + e;
-        firstNumber = displayValue;
-        functionUsed = true;
-        signUsed = e;
-        history.textContent = historyValue;
-        result.textContent = displayValue;
-        firstFunctionUsed = true;
-        floatUsed = false;
-        floatNumber = 0;
-    } else if(firstNumber > 0 && secondNumber > 0) {
-        secondNumber = displayValue;
-        floatUsed = false;
-        history.textContent = historyValue;
-        wasFunctionUsedInsteadOfEquals = true;
-        secondSignUsed = e;
-        operate(signUsed, firstNumber, secondNumber);
-        floatNumber = 0;
+    function buttonFunction(e) {
+        let value = e;
+
+        if(firstNumber === undefined) {
+            console.log('no.');
+        }
+        if(operator === undefined) {
+            operator = value;
+            displayText.textContent += operator;
+        } if(firstNumber !== undefined && operator !== undefined && secondNumber !== undefined) {
+            equalsUsedWithOperator = true;
+            operatorUsedAsEquals = value;
+            operate(firstNumber, secondNumber, operator);
+        } else {
+            displayText.textContent = displayText.textContent.replace(operator, value);
+            operator = value;
+        }
     }
-}
 
-function equal(e) {
-    secondNumber = displayValue;
-    if(firstNumber === 0) {
-
-    } else if(secondNumber === 0 && signUsed === "÷") {
-      alert("You can't divide with 0!");
-    } else {
-        historyValue += displayValue + "=";
-        history.textContent = historyValue;
-
-        operate(signUsed, firstNumber, secondNumber);
+    function decimalsFunction() {
+        if(firstDecimalsUsed === undefined && secondNumber === undefined) {
+            firstDecimalsUsed = true;
+            displayText.textContent += '.';
+        }
+        if(secondDecimalsUsed === undefined && secondNumber !== undefined) {
+            secondDecimalsUsed = true;
+            displayText.textContent += '.';
+        }
     }
-}
 
-function addFloat() {
-    displayValue += "." + floatNumber;
-    floatNumber = Math.round(displayValue * 10) / 10;
-    floatUsed = true;
-    result.textContent = displayValue;
-}
+    function equalsFunction() {
+        if(!firstNumber && !secondNumber && !operator) {
+            console.log("this is wrong and you know it.");
+        }
+        if(firstNumber !== undefined && operator !== undefined && secondNumber !== undefined) {
+            operate(firstNumber, secondNumber, operator);
+        }
+    }
 
-
-
-numbers.forEach((button) => {
-    button.addEventListener("click", (e) => {
-        writeNumbers(e.target.textContent);
+    functionButtons.forEach(button => {
+        button.addEventListener("click", e => buttonFunction(e.target.textContent));
     });
-});
 
-functionAdding.forEach((button) => {
-    button.addEventListener("click", (e) => {
-        operator(e.target.textContent);
+    numberButtons.forEach(button => {
+        button.addEventListener("click", e => numberFunction(e.target.textContent));
     });
-});
 
-equals.addEventListener("click", (e) => {
-    equal(e.target.textContent);
-});
+    equals.addEventListener("click", e => equalsFunction());
 
-clear.addEventListener("click", (e) => {
-    displayValue = 0;
-    firstNumber = 0;
-    secondNumber = 0;
-    resultNumber = 0;
-    floatNumber = 0;
-    floatUsed = false;
-    historyValue = "";
-    functionUsed = false;
-    result.textContent = displayValue;
-    history.textContent = historyValue;
-});
+    secondFunctionButtons.forEach(button => {
+        button.addEventListener("click", e => {
+            let classOfButton = e.target.classList.value;
+            
+            classOfButton === "reset" ? reset() :
+            classOfButton === "delete" ? deleteNumber() :
+            console.log("Something went wrong");
+        });
+    });
 
-deleteButton.addEventListener("click", (e) => {
-    deleteFunction();
-});
+    decimals.addEventListener("click", e => decimalsFunction());
 
-iAmFloating.addEventListener("click", (e) => {
-    addFloat();
-});
+    window.addEventListener("keydown", e => {
+        if(e.key === "1" || e.key === "2" || e.key === "3" || e.key === "4" || e.key === "5" ||
+           e.key === "6" || e.key === "7" || e.key === "8" || e.key === "9" || e.key === "10") {
+            numberFunction(e.key);
+        }
+        if(e.key === ".") {
+            decimalsFunction();
+        }
+        if(e.key === "+" || e.key === "/" || e.key === "-" || e.key === "*") {
+            if(e.key === "/") {
+                buttonFunction("÷");
+            } else if(e.key === "*") {
+                buttonFunction("x");
+            } else {
+                buttonFunction(e.key);
+            }
+        }
+        if(e.key === "Enter") {
+            equalsFunction();
+        }
+    });
+}
+
+events();
